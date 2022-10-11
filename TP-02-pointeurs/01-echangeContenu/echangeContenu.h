@@ -1,3 +1,6 @@
-#pragma once
+#ifndef _ECHANGE_CONTENU_H_
+#define _ECHANGE_CONTENU_H_
 
-// TODO: definir echangeContenu
+void echangeContenu(int *a, int *b);
+
+#endif /* _ECHANGE_CONTENU_H_ */
