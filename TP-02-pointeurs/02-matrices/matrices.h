@@ -1,8 +1,26 @@
 #ifndef _MATRICES_H_
 #define _MATRICES_H_
 
-void matrix_mult(int64_t **MatriceRes, int64_t **Matrice1, int64_t **Matrice2);
+#include <stdlib.h>
+#include <stdio.h>
 
-void matrix_print(int64_t **matrice);
+typedef struct matrice
+{
+    int i;
+
+    int j;
+
+    int *ppValeurs;
+
+    int cbSize;
+} Matrice;
+
+int init_matrix(Matrice *M, int i, int j);
+
+void add_value_matrix(Matrice *M, int value, int i, int j);
+
+int matrix_mult(Matrice *M, Matrice *m1, Matrice *m2);
+
+void matrix_print(Matrice *M);
 
 #endif /* _MATRICES_H_ */
