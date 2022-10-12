@@ -16,6 +16,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
+
+#define MAX_NAME_SIZE 256
+#define MAX_DESC_SIZE 1024
+#define MAX_TURING_WINNERS 50
+
+typedef struct tagTURING_WINNERS
+{
+	uint16_t Year;
+
+	char Name[MAX_NAME_SIZE];
+
+	char TheseDesc[MAX_DESC_SIZE];
+
+} TURING_WINNERS;
 
 /* This function scans a line of text (until \n) and returns a char* that contains all characters on the line (up to 255) excluding \n.
 It also ensures the \0 termination.
@@ -48,12 +63,42 @@ int scanLineAsInt() {
 	return buf;
 }
 
+void readAWinner(TURING_WINNERS *pTw)
+{
+	pTw->Year = scanLineAsInt();
+	memcpy(pTw->Name, scanLine(), MAX_NAME_SIZE);
+	memcpy(pTw->TheseDesc, scanLine(), MAX_DESC_SIZE);
+}
+
+void readWinners(TURING_WINNERS *pTW, unsigned int nbWinners)
+{
+	int i = 0;
+
+	for (i = 0; i < nbWinners; i++)
+	{
+		readAWinner(pTW + sizeof(TURING_WINNERS)*i);
+	}
+}
+
+void printWinners(void)
+{
+
+}
 
 int main(void)
 {
+	int i = 0;
+	int nbGagnants = 0;
 
-	int nbGagnants = scanLineAsInt();
+	TURING_WINNERS *ptblTW = NULL;
+
+	nbGagnants = scanLineAsInt();
 	printf("nbGagnants = %i\n",nbGagnants);
+
+	ptblTW = (TURING_WINNERS *) calloc(nbGagnants, sizeof(TURING_WINNERS));
+
+	readWinners(ptblTW, nbGagnants);
+
 
 	return EXIT_SUCCESS;
 }
