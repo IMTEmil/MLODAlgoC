@@ -132,5 +132,6 @@ int main(void)
     fprintf(stdout, "On est au %hu jours de l'année.", jourDansAnnee(*d3));
 
     free(d3);
+    d3 = NULL;
     return 0;
 }
