@@ -17,7 +17,7 @@ void add_value_matrix(Matrice *M, int value, int i, int j)
     {
         if (i * j <= M->cbSize)
         {
-            *((M->ppValeurs + i * M->j) + j) = value;
+            *((M->ppValeurs + (i * M->j)) + j) = value;
         }
     }
 }
@@ -38,7 +38,7 @@ int matrix_mult(Matrice *M, Matrice *m1, Matrice *m2)
         {
             for (k = 0; k < M->j; k++)
             {
-                value += *((m1->ppValeurs + i) + k) * *((m2->ppValeurs + k) + j);
+                value += *((m1->ppValeurs + (i * M->j)) + k) * *((m2->ppValeurs + (k * M->j)) + j);
             }
             add_value_matrix(M, value ,i , j);
             value = 0;
@@ -56,7 +56,7 @@ void matrix_print(Matrice *M)
     {
         for (j = 0; j < M->j; j++)
         {
-            fprintf(stdout, "%d ", *((M->ppValeurs + i) + j));
+            fprintf(stdout, "%d ", *((M->ppValeurs + i * M->j) + j));
         }
         fprintf(stdout, "\n");
     }

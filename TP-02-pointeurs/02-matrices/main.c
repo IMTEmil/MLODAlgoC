@@ -24,15 +24,15 @@ int main(void)
         {
             add_value_matrix(&M1, matrice1[i][j], i, j);
 
-            add_value_matrix(&M2, matrice1[i][j], i, j);
+            add_value_matrix(&M2, matrice2[i][j], i, j);
         }
     }
 
     matrix_print(&M1);
     matrix_print(&M2);
 
-    //matrix_mult(&M, &M1, &M2);
-    //matrix_print(&M);
+    matrix_mult(&M, &M1, &M2);
+    matrix_print(&M);
 
     //free(M.ppValeurs);
 
