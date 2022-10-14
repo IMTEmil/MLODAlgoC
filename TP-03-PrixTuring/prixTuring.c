@@ -21,6 +21,7 @@
 #define MAX_NAME_SIZE 256
 #define MAX_DESC_SIZE 1024
 #define MAX_TURING_WINNERS 50
+#define STARTING_YEAR 1968
 
 typedef struct tagTURING_WINNERS
 {
@@ -31,6 +32,15 @@ typedef struct tagTURING_WINNERS
 	char TheseDesc[MAX_DESC_SIZE];
 
 } TURING_WINNERS;
+
+typedef struct tagTWList
+{
+	TURING_WINNERS *pTW;
+
+	unsigned int nbWinners;
+} TWLIST;
+
+TWLIST g_TWL = {0};
 
 /* This function scans a line of text (until \n) and returns a char* that contains all characters on the line (up to 255) excluding \n.
 It also ensures the \0 termination.
@@ -70,35 +80,81 @@ void readAWinner(TURING_WINNERS *pTw)
 	memcpy(pTw->TheseDesc, scanLine(), MAX_DESC_SIZE);
 }
 
-void readWinners(TURING_WINNERS *pTW, unsigned int nbWinners)
+void readWinners(TWLIST *pTWL)
 {
 	int i = 0;
 
-	for (i = 0; i < nbWinners; i++)
+	for (i = 0; i < pTWL->nbWinners; i++)
 	{
-		readAWinner(pTW + sizeof(TURING_WINNERS)*i);
+		readAWinner(pTWL->pTW + i);
 	}
 }
 
-void printWinners(void)
+void TWprintf(TURING_WINNERS *pTW)
 {
-
+	fprintf(stdout, "%d\n", pTW->Year);
+	fprintf(stdout, "%s\n", pTW->Name);
+	fprintf(stdout, "%s\n", pTW->TheseDesc);
 }
 
-int main(void)
+void printWinners(TWLIST *pTWL)
 {
 	int i = 0;
-	int nbGagnants = 0;
 
-	TURING_WINNERS *ptblTW = NULL;
+	printf("%i\n", g_TWL.nbWinners);
 
-	nbGagnants = scanLineAsInt();
-	printf("nbGagnants = %i\n",nbGagnants);
+	for (i = 0; i < pTWL->nbWinners; i++)
+	{
+		TWprintf(pTWL->pTW + i);
+	}
+}
 
-	ptblTW = (TURING_WINNERS *) calloc(nbGagnants, sizeof(TURING_WINNERS));
+void TWL_PrintTable(void)
+{
+	printWinners(&g_TWL);
+}
 
-	readWinners(ptblTW, nbGagnants);
+void TWL_FillTable(void)
+{
+	int i = 0;
 
+	g_TWL.nbWinners = scanLineAsInt();
+
+	g_TWL.pTW = malloc(g_TWL.nbWinners * sizeof(TURING_WINNERS));
+
+	readWinners(&g_TWL);
+}
+
+void infoAnnee(uint16_t Year)
+{
+	TURING_WINNERS TW = { 0 };
+
+	if (Year == 1972) 
+	{
+		fprintf(stdout, "Pas de prix nobel pour 1972 dans nos données.");
+	}
+	else 
+	{
+		memcpy(&TW, g_TWL.pTW + (Year - STARTING_YEAR), sizeof(TURING_WINNERS));
+		fprintf(stdout, "L'année %d, le(s) gagnant(s) ont été : %s\nNature des travaux : %s\n", TW.Year, TW.Name, TW.TheseDesc);
+	}
+}
+
+int main(int argc, char **argv)
+{
+	TWL_FillTable();
+
+	if (argc == 1)
+	{
+		TWL_PrintTable();
+	}
+	
+	if (argc == 2)
+	{
+		infoAnnee(1989);
+	}
+
+	free(g_TWL.pTW);
 
 	return EXIT_SUCCESS;
 }
