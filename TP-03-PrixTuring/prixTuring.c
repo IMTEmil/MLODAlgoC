@@ -125,19 +125,23 @@ void TWL_FillTable(void)
 	readWinners(&g_TWL);
 }
 
-void infoAnnee(uint16_t Year)
+void TWL_YearInfos(uint16_t Year)
 {
 	TURING_WINNERS TW = { 0 };
+	int i = 0;
 
-	if (Year == 1972) 
+	while (i < g_TWL.nbWinners)
 	{
-		fprintf(stdout, "Pas de prix nobel pour 1972 dans nos données.");
+		if (Year == (g_TWL.pTW + i)->Year)
+		{
+			memcpy(&TW, g_TWL.pTW + i, sizeof(TURING_WINNERS));
+			break;
+		}
+		i++;
 	}
-	else 
-	{
-		memcpy(&TW, g_TWL.pTW + (Year - STARTING_YEAR), sizeof(TURING_WINNERS));
-		fprintf(stdout, "L'année %d, le(s) gagnant(s) ont été : %s\nNature des travaux : %s\n", TW.Year, TW.Name, TW.TheseDesc);
-	}
+
+	fprintf(stdout, "L'année %d, le(s) gagnant(s) ont été : %s\nNature des travaux : %s", TW.Year, TW.Name, TW.TheseDesc);
+
 }
 
 int main(int argc, char **argv)
@@ -151,7 +155,7 @@ int main(int argc, char **argv)
 	
 	if (argc == 2)
 	{
-		infoAnnee(1989);
+		TWL_YearInfos(argv[1]);
 	}
 
 	free(g_TWL.pTW);
