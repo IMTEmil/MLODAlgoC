@@ -77,9 +77,18 @@ int scanLineAsInt() {
 }
 */
 
-void TWL_OpenTxtFile(FILE **file, char *FileName)
+void TWL_OpenReadFile(FILE **file, char *FileName)
 {
     *file = fopen(FileName, "r");
+    if (*file == NULL)
+    {
+        fprintf(stderr, "Error opening %s file.", FileName);
+    }
+}
+
+void TWL_OpenWriteFile(FILE **file, char *FileName)
+{
+    *file = fopen(FileName, "w");
     if (*file == NULL)
     {
         fprintf(stderr, "Error opening %s file.", FileName);
@@ -128,28 +137,28 @@ void TWL_ReadWinners(TWLIST *pTWL, FILE *file)
 	}
 }
 
-void TWprintf(TURING_WINNERS *pTW)
+void TWprintf(TURING_WINNERS *pTW, FILE *OutputFile)
 {
-	fprintf(stdout, "%d\n", pTW->Year);
-	fprintf(stdout, "%s\n", pTW->Name);
-	fprintf(stdout, "%s\n", pTW->TheseDesc);
+	fprintf(OutputFile, "%d\n", pTW->Year);
+	fprintf(OutputFile, "%s\n", pTW->Name);
+	fprintf(OutputFile, "%s\n", pTW->TheseDesc);
 }
 
-void printWinners(TWLIST *pTWL)
+void printWinners(TWLIST *pTWL, FILE *OutputFile)
 {
 	int i = 0;
 
-	printf("%i\n", g_TWL.nbWinners);
+	fprintf(OutputFile, "%i\n", g_TWL.nbWinners);
 
 	for (i = 0; i < pTWL->nbWinners; i++)
 	{
-		TWprintf(pTWL->pTW + i);
+		TWprintf(pTWL->pTW + i, OutputFile);
 	}
 }
 
-void TWL_PrintTable(void)
+void TWL_PrintTable(FILE *OutputFile)
 {
-	printWinners(&g_TWL);
+	printWinners(&g_TWL, OutputFile);
 }
 
 void TWL_FillTable(char *FileName)
@@ -158,7 +167,7 @@ void TWL_FillTable(char *FileName)
     FILE *file = NULL;
     char nbWinners[4] = { 0 };
 
-    TWL_OpenTxtFile(&file, FileName);
+    TWL_OpenReadFile(&file, FileName);
 
 	TWL_ReadLineFileAsInt(file, &g_TWL.nbWinners);
 
@@ -184,20 +193,29 @@ void infoAnnee(uint16_t Year)
 
 int main(int argc, char **argv)
 {
-    if (argc > 1)
+    FILE *file = NULL;
+
+    if (argc == 1)
     {
-	    TWL_FillTable(argv[1]);
+        fprintf(stdout, "Ajoutez des arguments. Au moins une liste de gagnants du prix Turing.\n");
     }
 
-	if (argc > 2)
+    if (argc == 2)
+    {
+	    TWL_FillTable(argv[1]);
+        if (argc == 2) TWL_PrintTable(stdout);
+    }
+
+	if (argc == 3)
 	{
-		TWL_PrintTable();
+        TWL_OpenWriteFile(&file, argv[2]);
+		TWL_PrintTable(file);
 	}
-	
-	if (argc == 2)
-	{
-		infoAnnee(1989);
-	}
+
+    if (argc == 4)
+    {
+        
+    }
 
 	free(g_TWL.pTW);
 
