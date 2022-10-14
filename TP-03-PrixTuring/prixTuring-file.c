@@ -41,8 +41,6 @@ typedef struct tagTWList
 	unsigned int nbWinners;
 } TWLIST;
 
-TWLIST g_TWL = {0};
-
 /* This function scans a line of text (until \n) and returns a char* that contains all characters on the line (up to 255) excluding \n.
 It also ensures the \0 termination.
 **WARNING**: The result of this function has been allocated (calloc) by the function */
@@ -148,7 +146,7 @@ void printWinners(TWLIST *pTWL, FILE *OutputFile)
 {
 	int i = 0;
 
-	fprintf(OutputFile, "%i\n", g_TWL.nbWinners);
+	fprintf(OutputFile, "%i\n", pTWL->nbWinners);
 
 	for (i = 0; i < pTWL->nbWinners; i++)
 	{
@@ -156,12 +154,12 @@ void printWinners(TWLIST *pTWL, FILE *OutputFile)
 	}
 }
 
-void TWL_PrintTable(FILE *OutputFile)
+void TWL_PrintTable(TWLIST *pTWL, FILE *OutputFile)
 {
-	printWinners(&g_TWL, OutputFile);
+	printWinners(pTWL, OutputFile);
 }
 
-void TWL_FillTable(char *FileName)
+void TWL_FillTable(TWLIST *pTWL, char *FileName)
 {
 	int i = 0;
     FILE *file = NULL;
@@ -169,14 +167,14 @@ void TWL_FillTable(char *FileName)
 
     TWL_OpenReadFile(&file, FileName);
 
-	TWL_ReadLineFileAsInt(file, &g_TWL.nbWinners);
+	TWL_ReadLineFileAsInt(file, &pTWL->nbWinners);
 
-	g_TWL.pTW = malloc(g_TWL.nbWinners * sizeof(TURING_WINNERS));
+	pTWL->pTW = malloc(pTWL->nbWinners * sizeof(TURING_WINNERS));
 
-	TWL_ReadWinners(&g_TWL, file);
+	TWL_ReadWinners(pTWL, file);
 }
 
-void infoAnnee(uint16_t Year)
+void infoAnnee(TWLIST *pTWL, uint16_t Year)
 {
 	TURING_WINNERS TW = { 0 };
 
@@ -186,40 +184,104 @@ void infoAnnee(uint16_t Year)
 	}
 	else 
 	{
-		memcpy(&TW, g_TWL.pTW + (Year - STARTING_YEAR), sizeof(TURING_WINNERS));
+		memcpy(&TW, pTWL->pTW + (Year - STARTING_YEAR), sizeof(TURING_WINNERS));
 		fprintf(stdout, "L'année %d, le(s) gagnant(s) ont été : %s\nNature des travaux : %s\n", TW.Year, TW.Name, TW.TheseDesc);
 	}
 }
 
-void TWL_Merge(TURING_WINNERS *pTW, int p, int q, int r)
+void TWL_SwapTW(TURING_WINNERS *pTWL, int x, int y)
 {
+	TURING_WINNERS tempTW = {0};
+
+	memcpy(&tempTW, pTWL + x, sizeof(TURING_WINNERS));
+
+	memcpy(pTWL + x, pTWL + y, sizeof(TURING_WINNERS));
+
+	memcpy(pTWL + y, &tempTW, sizeof(TURING_WINNERS));
+}
+
+void TWL_Merge(TWLIST *pTWL, int p, int q, int r)
+{
+	int n1 = q - p + 1;
+	int n2 = r - q;
+	int i = 0, j = 0, k = 0;
+
+	TWLIST TWL1 = {0};
+	TWLIST TWL2 = {0};
+
+	TWL1.nbWinners = n1;
+	TWL2.nbWinners = n2;
+
+	TWL1.pTW = malloc(n1 * sizeof(TURING_WINNERS));
+	TWL2.pTW = malloc(n2 * sizeof(TURING_WINNERS));
+
+	for (i = 0; i < n1; i++)
+	{
+		memcpy(TWL1.pTW + i, pTWL->pTW + p + i, sizeof(TURING_WINNERS));
+	}
+
+	for (i = 0; i < n2; i++)
+	{
+		memcpy(TWL2.pTW + i, pTWL->pTW + q + i + 1, sizeof(TURING_WINNERS));
+	}
+
+	i = 0;
+	j = 0;
+	k = p;
+
+	while (i < n1 && j < n2) {
+		if ((TWL1.pTW + i)->Year <= (TWL2.pTW + j)->Year) {
+			memcpy(pTWL->pTW + k, TWL1.pTW + i, sizeof(TURING_WINNERS));
+			i++;
+		} else {
+			memcpy(pTWL->pTW + k, TWL2.pTW + j, sizeof(TURING_WINNERS));
+			j++;
+		}
+		k++;
+		}
+
+		while (i < n1) {
+			memcpy(pTWL->pTW + k, TWL1.pTW + i, sizeof(TURING_WINNERS));	
+			i++;
+			k++;
+		}
+		while (j < n2) {
+			memcpy(pTWL->pTW + k, TWL2.pTW + j, sizeof(TURING_WINNERS));
+			j++;
+			k++;
+		}
+
+		free(TWL1.pTW);
+		free(TWL2.pTW);
 
 }
 
-void TWL_MergeSort(TURING_WINNERS *pTW, int l, int r)
+void TWL_MergeSort(TWLIST *pTWL, int l, int r)
 {
     int m = 0;
 
     if (l < r)
     {
-        m = (l + r - 1) / 2;
+        m = (l + r) / 2;
 
-        TWL_MergeSort(pTW, l, m);
+        TWL_MergeSort(pTWL, l, m);
 
-        TWL_MergeSort(pTW, m + 1, r);
+        TWL_MergeSort(pTWL, m + 1, r);
 
-        TWL_Merge(pTW, l, m, r);        
+        TWL_Merge(pTWL, l, m, r);        
     }
 }
 
-void TWL_SortByYear(bool asc)
+void TWL_SortByYear(TWLIST *pTWL)
 {   
-
+	TWL_MergeSort(pTWL, 0, pTWL->nbWinners - 1);
 }
 
 int main(int argc, char **argv)
 {
     FILE *file = NULL;
+
+	TWLIST TWL = {0};
 
     if (argc == 1)
     {
@@ -228,22 +290,25 @@ int main(int argc, char **argv)
 
     if (argc == 2)
     {
-	    TWL_FillTable(argv[1]);
-        if (argc == 2) TWL_PrintTable(stdout);
+	    TWL_FillTable(&TWL, argv[1]);
+        if (argc == 2) TWL_PrintTable(&TWL, stdout);
     }
 
 	if (argc == 3)
 	{
         TWL_OpenWriteFile(&file, argv[2]);
-		TWL_PrintTable(file);
+		TWL_PrintTable(&TWL, file);
 	}
 
-    if (argc == 4)
+    if (argc == 4 || strcmp(argv[3], "sort"))
     {
-        TWL_SortByYear(0);
+	    TWL_FillTable(&TWL, argv[1]);
+        TWL_SortByYear(&TWL); 
+		TWL_OpenWriteFile(&file, argv[2]);
+		TWL_PrintTable(&TWL, file);
     }
 
-	free(g_TWL.pTW);
+	free(TWL.pTW);
 
 	return EXIT_SUCCESS;
 }
