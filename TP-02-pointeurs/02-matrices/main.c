@@ -34,7 +34,11 @@ int main(void)
     matrix_mult(&M, &M1, &M2);
     matrix_print(&M);
 
-    //free(M.ppValeurs);
+    matrix_free(&M);
+
+    matrix_free(&M1);
+
+    matrix_free(&M2);
 
     return 0;
 }

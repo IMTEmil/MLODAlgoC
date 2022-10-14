@@ -23,4 +23,6 @@ int matrix_mult(Matrice *M, Matrice *m1, Matrice *m2);
 
 void matrix_print(Matrice *M);
 
+void matrix_free(Matrice *M);
+
 #endif /* _MATRICES_H_ */

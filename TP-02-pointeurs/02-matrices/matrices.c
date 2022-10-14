@@ -60,4 +60,10 @@ void matrix_print(Matrice *M)
         }
         fprintf(stdout, "\n");
     }
+    fprintf(stdout, "\n");
+}
+
+void matrix_free(Matrice *M)
+{
+    free(M->ppValeurs);
 }
