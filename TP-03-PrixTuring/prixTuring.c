@@ -18,18 +18,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define MAX_NAME_SIZE 256
-#define MAX_DESC_SIZE 1024
-#define MAX_TURING_WINNERS 50
-#define STARTING_YEAR 1968
-
 typedef struct tagTURING_WINNERS
 {
 	uint16_t Year;
 
-	char Name[MAX_NAME_SIZE];
+	char *Name;
 
-	char TheseDesc[MAX_DESC_SIZE];
+	char *TheseDesc;
 
 } TURING_WINNERS;
 
@@ -40,7 +35,6 @@ typedef struct tagTWList
 	unsigned int nbWinners;
 } TWLIST;
 
-TWLIST g_TWL = {0};
 
 /* This function scans a line of text (until \n) and returns a char* that contains all characters on the line (up to 255) excluding \n.
 It also ensures the \0 termination.
@@ -48,7 +42,7 @@ It also ensures the \0 termination.
 char* scanLine()
 {
 	int maxLineSize = 255;
-	char c, *line = calloc(maxLineSize+1,sizeof(char));
+	char c, *line = calloc(maxLineSize + 1,sizeof(char));
 
 	scanf("%250[^\n]", line);
 
@@ -73,68 +67,63 @@ int scanLineAsInt() {
 	return buf;
 }
 
-void readAWinner(TURING_WINNERS *pTw)
+void TWL_ReadAWinnerFromFile(TURING_WINNERS *pTw)
 {
 	pTw->Year = scanLineAsInt();
-	memcpy(pTw->Name, scanLine(), MAX_NAME_SIZE);
-	memcpy(pTw->TheseDesc, scanLine(), MAX_DESC_SIZE);
+	pTw->Name = scanLine();
+	pTw->TheseDesc = scanLine();
 }
 
-void readWinners(TWLIST *pTWL)
+void TWL_ReadWinnersFromFile(TWLIST *pTWL)
 {
 	int i = 0;
 
 	for (i = 0; i < pTWL->nbWinners; i++)
 	{
-		readAWinner(pTWL->pTW + i);
+		TWL_ReadAWinnerFromFile(pTWL->pTW + i);
 	}
 }
 
-void TWprintf(TURING_WINNERS *pTW)
+void TWL_PrintfAWinner(TURING_WINNERS *pTW)
 {
 	fprintf(stdout, "%d\n", pTW->Year);
 	fprintf(stdout, "%s\n", pTW->Name);
 	fprintf(stdout, "%s\n", pTW->TheseDesc);
 }
 
-void printWinners(TWLIST *pTWL)
+void TWL_PrintWinners(TWLIST *pTWL)
 {
 	int i = 0;
 
-	printf("%i\n", g_TWL.nbWinners);
+	printf("%i\n", pTWL->nbWinners);
 
 	for (i = 0; i < pTWL->nbWinners; i++)
 	{
-		TWprintf(pTWL->pTW + i);
+		TWL_PrintfAWinner(pTWL->pTW + i);
 	}
 }
 
-void TWL_PrintTable(void)
-{
-	printWinners(&g_TWL);
-}
-
-void TWL_FillTable(void)
+void TWL_FillTableWithWinners(TWLIST *pTWL)
 {
 	int i = 0;
 
-	g_TWL.nbWinners = scanLineAsInt();
+	pTWL->nbWinners = scanLineAsInt();
 
-	g_TWL.pTW = malloc(g_TWL.nbWinners * sizeof(TURING_WINNERS));
+	pTWL->pTW = malloc(pTWL->nbWinners * sizeof(TURING_WINNERS));
 
-	readWinners(&g_TWL);
+	TWL_ReadWinnersFromFile(pTWL);
 }
 
-void TWL_YearInfos(uint16_t Year)
+void TWL_YearInfos(uint16_t Year, TWLIST *pTWL)
 {
 	TURING_WINNERS TW = { 0 };
 	int i = 0;
 
-	while (i < g_TWL.nbWinners)
+	while (i < pTWL->nbWinners)
 	{
-		if (Year == (g_TWL.pTW + i)->Year)
+		if (Year == (pTWL->pTW + i)->Year)
 		{
-			memcpy(&TW, g_TWL.pTW + i, sizeof(TURING_WINNERS));
+			memcpy(&TW, pTWL->pTW + i, sizeof(TURING_WINNERS));
 			break;
 		}
 		i++;
@@ -144,21 +133,39 @@ void TWL_YearInfos(uint16_t Year)
 
 }
 
+void TWL_CloseTWL(TWLIST *pTWL)
+{
+	int i = 0;
+
+	for (i = 0; i < pTWL->nbWinners; i++)
+	{
+		free((pTWL->pTW + i)->Name);
+		free((pTWL->pTW + i)->TheseDesc);
+	}
+
+	free(pTWL->pTW);
+}
+
 int main(int argc, char **argv)
 {
-	TWL_FillTable();
+	int year = 0;
+
+	TWLIST TWL = {0};
+
+	TWL_FillTableWithWinners(&TWL);
 
 	if (argc == 1)
 	{
-		TWL_PrintTable();
+		TWL_PrintWinners(&TWL);
 	}
 	
 	if (argc == 2)
 	{
-		TWL_YearInfos(argv[1]);
+		year = atoi(argv[1]);
+		TWL_YearInfos((uint16_t)year, &TWL);
 	}
 
-	free(g_TWL.pTW);
+	TWL_CloseTWL(&TWL);
 
 	return EXIT_SUCCESS;
 }
