@@ -191,6 +191,32 @@ void infoAnnee(uint16_t Year)
 	}
 }
 
+void TWL_Merge(TURING_WINNERS *pTW, int p, int q, int r)
+{
+
+}
+
+void TWL_MergeSort(TURING_WINNERS *pTW, int l, int r)
+{
+    int m = 0;
+
+    if (l < r)
+    {
+        m = (l + r - 1) / 2;
+
+        TWL_MergeSort(pTW, l, m);
+
+        TWL_MergeSort(pTW, m + 1, r);
+
+        TWL_Merge(pTW, l, m, r);        
+    }
+}
+
+void TWL_SortByYear(bool asc)
+{   
+
+}
+
 int main(int argc, char **argv)
 {
     FILE *file = NULL;
@@ -214,7 +240,7 @@ int main(int argc, char **argv)
 
     if (argc == 4)
     {
-        
+        TWL_SortByYear(0);
     }
 
 	free(g_TWL.pTW);
