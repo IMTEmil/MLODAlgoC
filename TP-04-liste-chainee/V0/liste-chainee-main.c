@@ -21,17 +21,22 @@ int main(void){
 	l = ajoutTete(4,l);
 	l = ajoutTete(1,l);
 
-	afficheListe_i(l);
+	//afficheListe_i(l);
 
 	ajoutFin_r(99,l);
 	afficheListe_i(l);
 
-	ajoutFin_r(100,l);
+	fprintf(stdout, "\n");
+	
+	ajoutFin_i(100,l);
 	afficheListe_i(l);
 
+	fprintf(stdout, "\n");
+	
 	p = cherche_i(200,l);
 	printf("cherche_i(200) : %s\n",estVide(p)?"pas trouve":"[ERREUR] trouve !!!");
 
+	
 	p = cherche_i(99,l);
 	if(estVide(p))
 		printf("cherche_i(99) : [ERREUR] pas trouve \n");
@@ -41,9 +46,11 @@ int main(void){
 		printf("\n");
 	}
 
+	
 	p = cherche_r(200,l);
 	printf("cherche_r(200) : %s\n",estVide(p)?"pas trouve":"[ERREUR] trouve !!!");
 
+	
 	p = cherche_r(99,l);
 	if(estVide(p))
 		printf("cherche_r(99) : [ERREUR] pas trouve \n");
@@ -53,10 +60,13 @@ int main(void){
 		printf("\n");
 	}
 
+	
 	printf("retirePremier_i(1)   : ");
 	l = retirePremier_i(1,l);
 	afficheListe_r(l);
 
+	fprintf(stdout, "\n");
+	/*
 	printf("retirePremier_i(1)   : ");
 	l = retirePremier_i(1,l);
 	afficheListe_r(l);
@@ -78,6 +88,6 @@ int main(void){
 	afficheListe_r(l);
 
 	detruire_r(l);
-
+	*/
 	return EXIT_SUCCESS;
 }
