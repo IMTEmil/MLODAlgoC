@@ -44,7 +44,7 @@ typedef struct tagTWList
 /* This function scans a line of text (until \n) and returns a char* that contains all characters on the line (up to 255) excluding \n.
 It also ensures the \0 termination.
 **WARNING**: The result of this function has been allocated (calloc) by the function */
-/* char* scanLine()
+char* scanLine()
 {
 	int maxLineSize = 255;
 	char c, *line = calloc(maxLineSize+1,sizeof(char));
@@ -64,7 +64,6 @@ It also ensures the \0 termination.
 
 	return line;
 }
-*/
 
 /* This function scans a line of text (until \n), converts it as an integer and returns this integer */
 /*
@@ -275,6 +274,19 @@ void TWL_MergeSort(TWLIST *pTWL, int l, int r)
 void TWL_SortByYear(TWLIST *pTWL)
 {   
 	TWL_MergeSort(pTWL, 0, pTWL->nbWinners - 1);
+}
+
+void TWL_AddNewWinner(TWLIST *pTWL)
+{
+	TURING_WINNERS pTW = {0};
+
+	pTWL->nbWinners++;
+
+	pTWL->pTW = realloc(pTWL->pTW, (pTWL->nbWinners + 1) sizeof(TURING_WINNERS));
+
+
+
+	memcpy(pTWL->pTW + pTWL->nbWinners, pTW, sizeof(TURING_WINNERS));
 }
 
 int main(int argc, char **argv)
