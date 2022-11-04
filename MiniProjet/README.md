@@ -27,3 +27,8 @@ Pour lancer le jeu:
 ```
 $ make game
 ```
+
+## Nettoyer
+```
+$ make clean
+```

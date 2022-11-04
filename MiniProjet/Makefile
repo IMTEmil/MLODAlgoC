@@ -3,3 +3,5 @@ snake: snake.c projet.c
 
 game: snake
 	./snake
+clean: 
+	rm snake
