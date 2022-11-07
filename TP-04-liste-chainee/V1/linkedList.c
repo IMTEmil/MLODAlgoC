@@ -55,11 +55,6 @@ void afficheListe_r(Liste l) {
 	}
 }
 
-void detruireElement(Element e) 
-{
-
-}
-
 // Détruit tous les éléments de la liste l
 // version itérative
 void detruire_i(Liste l) 
@@ -72,8 +67,9 @@ void detruire_i(Liste l)
 		nextList = currentList->suiv;
 		do {
 			free(currentList);
+			detruireElement(currentList);
 			currentList = nextList;
-			nextList = currentList->suinextList = currentList->suiv;v;
+			nextList = currentList->suiv; 
 		} while (nextList != NULL);
 	}
 }
@@ -84,6 +80,7 @@ void detruire_r(Liste l)
 	if (!(estVide(l)))
 	{
 		detruire_r(l->suiv);
+		detruireElement(l->suiv);
 		free(l);
 	}
 }

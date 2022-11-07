@@ -6,6 +6,11 @@ void afficheElement(Element e)
     printf("%s\n", e); // comment empecher l'erreur ?
 }
 
+void detruireElement(Element e)
+{
+
+}
+
 int main(void)
 {
     char *c = "chaine";
