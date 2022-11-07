@@ -61,7 +61,7 @@ void afficheListe_r(Liste l) {
 
 void detruireElement(Element e) 
 {
-	
+
 }
 
 // Détruit tous les éléments de la liste l
@@ -114,6 +114,7 @@ Liste ajoutFin_i(Element v, Liste l) {
 // version recursive
 Liste ajoutFin_r(Element v, Liste l) {
 	Liste newList = NULL;
+	if (!estVide(l)) return NULL;
 	if (!(estVide(l->suiv)))
 	{
 		ajoutFin_r(v, l->suiv);
