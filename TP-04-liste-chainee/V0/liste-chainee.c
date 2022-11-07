@@ -114,7 +114,7 @@ Liste ajoutFin_i(Element v, Liste l) {
 // version recursive
 Liste ajoutFin_r(Element v, Liste l) {
 	Liste newList = NULL;
-	if (!estVide(l)) return NULL;
+	if (estVide(l)) return NULL;
 	if (!(estVide(l->suiv)))
 	{
 		ajoutFin_r(v, l->suiv);
@@ -149,7 +149,7 @@ Liste cherche_i(Element v,Liste l)
 		}
 		if (iterList->val == v) return iterList;
 	}
-	return NULL;
+	return l;
 }
 
 // version récursive
@@ -160,7 +160,6 @@ Liste cherche_r(Element v,Liste l)
 		if (equalsElement(l->val, v))return l;
 		else cherche_r(v, l->suiv);
 	}
-	return l;
 }
 
 // Retourne la liste modifiée dans la laquelle le premier élément ayant la valeur v a été supprimé
