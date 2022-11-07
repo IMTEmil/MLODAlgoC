@@ -15,6 +15,8 @@ Le répertoire contient:
 * Un Makefile pour compiler et lancer le jeu.
 * Un README.md que vous êtes en train de lire. 
 
+Par négligence, j'ai développé le projet sur un repertoire différent de celui-ci. L'historique des commits peut y être retrouvé sur le répertoire [MiniProjet](https://github.com/IMTEmil/MiniProjet), les commits datant fait après le 4 novembre 2022 sont sur le répertoire courant.
+
 ## Compiler 
 Pour compiler veuillez lancer la commande: 
 ```
