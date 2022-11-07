@@ -61,7 +61,7 @@ void afficheListe_r(Liste l) {
 
 void detruireElement(Element e) 
 {
-
+	
 }
 
 // Détruit tous les éléments de la liste l
@@ -76,6 +76,7 @@ void detruire_i(Liste l)
 		nextList = currentList->suiv;
 		do {
 			free(currentList);
+			detruireElement(currentList->val);
 			currentList = nextList;
 			nextList = currentList->suiv;
 		} while (nextList != NULL);
@@ -88,6 +89,7 @@ void detruire_r(Liste l)
 	if (!(estVide(l)))
 	{
 		detruire_r(l->suiv);
+		detruireElement(l->val);
 		free(l);
 	}
 }

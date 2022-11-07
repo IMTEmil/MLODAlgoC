@@ -32,7 +32,7 @@ void afficheListe_i(Liste l);
 // version recursive
 void afficheListe_r(Liste l);
 
-void detruireElement(Element e);
+extern void detruireElement(Element e);
 
 // Détruit tous les éléments de la liste l
 // version itérative
