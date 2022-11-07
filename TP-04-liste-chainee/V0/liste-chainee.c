@@ -61,8 +61,9 @@ void afficheListe_r(Liste l) {
 	}
 }
 
-void detruireElement(Element e) {
-	
+void detruireElement(Element e) 
+{
+
 }
 
 // Détruit tous les éléments de la liste l
@@ -165,18 +166,60 @@ Liste cherche_r(Element v,Liste l)
 // version itérative
 Liste retirePremier_i(Element v, Liste l) 
 {
-	return TODO;
+	Liste currentElement = l;
+	Liste lastElement = {0};
+	if (!estVide(l))
+	{
+		while (currentElement != NULL)
+		{
+			if (equalsElement(v, currentElement->val))
+			{
+				if (lastElement != NULL)
+				{
+					lastElement->suiv = currentElement->suiv;
+				}
+				else {
+					l = currentElement->suiv;
+				}
+				free(currentElement);
+				currentElement = NULL;
+				break;
+			}
+			lastElement = currentElement;
+			currentElement = currentElement->suiv;
+		}
+	}
+	return l;
 }
 
-
 // version recursive
-Liste retirePremier_r(Element v, Liste l) {
-	return TODO;
+Liste retirePremier_r(Element v, Liste l) 
+{	
+	Liste premierElement = {0};
+	if (!estVide(l))
+	{
+		if (equalsElement(v, l->val))
+		{
+			premierElement = l;
+			l = l->suiv;
+			free(premierElement);
+			premierElement = NULL;
+		}
+		else {
+			l->suiv = retirePremier_r(v, l->suiv);
+		}
+	}	
+
+	return l;
 }
 
 
 void afficheEnvers_r(Liste l) {
-	TODO;
+	if (!estVide(l->suiv))
+	{
+		afficheEnvers_r(l->suiv);
+	}
+	afficheElement(l->val);
 }
 
 
