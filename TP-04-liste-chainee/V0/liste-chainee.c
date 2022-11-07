@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TODO NULL;
-
 // retourne vrai si l est vide et faux sinon
 bool estVide(Liste l) {
 	return l == NULL;
@@ -21,12 +19,12 @@ Liste creer(Element v){
 }
 
 // ajoute l'élément v en tete de la liste l
-Liste ajoutTete(Element v, Liste l) {
-	Liste newList = malloc(sizeof(Cellule));
+Liste ajoutTete(Element v, Liste l) 
+{
+	Liste newList = creer(v);
 	if (newList != NULL)
 	{
 		newList->suiv = l;
-		newList->val = v;
 	}
 	return newList;
 }
@@ -75,7 +73,7 @@ void detruire_i(Liste l)
 
 	if (!(estVide(l)))
 	{
-		currentList->suiv;
+		nextList = currentList->suiv;
 		do {
 			free(currentList);
 			currentList = nextList;
@@ -120,14 +118,14 @@ Liste ajoutFin_r(Element v, Liste l) {
 		return l;
 	}
 	else {
-		newList = malloc(sizeof(Cellule));
+		newList = creer(v);
 		if (newList != NULL)
 		{
-			newList->val = v;
 			newList->suiv = NULL;
 			l->suiv = newList;
 		}
 	}
+	return l;
 }
 
 // compare deux elements
@@ -159,6 +157,7 @@ Liste cherche_r(Element v,Liste l)
 		if (equalsElement(l->val, v))return l;
 		else cherche_r(v, l->suiv);
 	}
+	return l;
 }
 
 // Retourne la liste modifiée dans la laquelle le premier élément ayant la valeur v a été supprimé
@@ -194,7 +193,7 @@ Liste retirePremier_i(Element v, Liste l)
 
 // version recursive
 Liste retirePremier_r(Element v, Liste l) 
-{	
+{
 	Liste premierElement = {0};
 	if (!estVide(l))
 	{
