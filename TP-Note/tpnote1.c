@@ -84,5 +84,7 @@ int main(void)
 
     afficherTableau(&t3);
 
+    free(t3.valeurs);
+
     return 0;
 }
