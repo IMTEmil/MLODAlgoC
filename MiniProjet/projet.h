@@ -1,10 +1,10 @@
 #ifndef _PROJET_H_
 #define _PROJET_H_
 
-#include "raylib.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "raylib.h"
 
 #define MENU_CHOICE_FONT_SIZE 50
 #define SNARE_COUNT 30
