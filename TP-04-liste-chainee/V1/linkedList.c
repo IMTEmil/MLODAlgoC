@@ -72,13 +72,12 @@ void detruire_i(Liste l)
 	}
 }
 
-// version récursive
 void detruire_r(Liste l) 
 {
 	if (!(estVide(l)))
 	{
+		detruireElement(l->val);
 		detruire_r(l->suiv);
-		detruireElement(l->suiv);
 		free(l);
 	}
 }
