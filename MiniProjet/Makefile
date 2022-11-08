@@ -1,5 +1,5 @@
 snake: snake.c projet.c
-	cc -o snake projet.c snake.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 
+	gcc -o snake projet.c snake.c -I${HOME}/Raylib.git/src/ -Wall -std=c11 ${HOME}//Raylib.git/src/libraylib.a -lm -ldl -lrt -lpthread -lGL -lX11
 
 game: snake
 	./snake
