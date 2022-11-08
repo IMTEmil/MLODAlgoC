@@ -101,9 +101,9 @@ Liste ajoutFin_i(Element v, Liste l) {
 	Liste newList = malloc(sizeof(Cellule));
 	if (newList != NULL)
 	{
-		do {
+		while (lastElement->suiv != NULL) {
 			lastElement = lastElement->suiv;
-		} while (lastElement->suiv != NULL);
+		} 
 	}
 	lastElement->suiv = newList;
 	newList->val = v;
