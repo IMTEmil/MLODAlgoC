@@ -3,7 +3,7 @@
 
 void afficheElement(Element e)
 {
-    printf("%s\n", e); // comment empecher l'erreur ?
+    printf("%s\n", (char *)e);
 }
 
 void detruireElement(Element e)
@@ -16,8 +16,16 @@ int main(void)
     char *c = "chaine";
     char *d = "de";
     char *e = "charactere";
+    
+    /*printf("main = %p\n ",main);
+    printf("c = %p\n ",c);
+    printf("d = %p\n ",d);
+    printf("e = %p\n ",e);*/
+ 
     Liste p = NULL;
     Liste l = creer(d);
+    //printf("l = %p\n ",l);
+
 
     l = ajoutTete(c, l);
 
