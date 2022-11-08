@@ -1,6 +1,4 @@
 #include "linkedList.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 // retourne vrai si l est vide et faux sinon
 bool estVide(Liste l) {
@@ -64,13 +62,13 @@ void detruire_i(Liste l)
 
 	if (!(estVide(l)))
 	{
-		nextList = currentList->suiv;
-		do {
+		while (currentList != NULL) 
+		{
+			nextList = currentList->suiv;
+			detruireElement(currentList->val);
 			free(currentList);
-			detruireElement(currentList);
 			currentList = nextList;
-			nextList = currentList->suiv; 
-		} while (nextList != NULL);
+		}
 	}
 }
 
@@ -92,9 +90,9 @@ Liste ajoutFin_i(Element v, Liste l) {
 	Liste newList = malloc(sizeof(Cellule));
 	if (newList != NULL)
 	{
-		do {
+		while (lastElement->suiv != NULL){
 			lastElement = lastElement->suiv;
-		} while (lastElement->suiv != NULL);
+		}
 	}
 	lastElement->suiv = newList;
 	newList->val = v;
@@ -120,11 +118,6 @@ Liste ajoutFin_r(Element v, Liste l) {
 			l->suiv = newList;
 		}
 	}
-}
-
-// compare deux elements
-bool equalsElement(Element e1, Element e2){
-	return e1 == e2;
 }
 
 // Retourne un pointeur sur l'élément de la liste l contenant la valeur v ou NULL

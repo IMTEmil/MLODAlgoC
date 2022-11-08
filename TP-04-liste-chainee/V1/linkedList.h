@@ -2,6 +2,9 @@
 #define _LINKED_LIST_H_
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 typedef void* Element;
 
@@ -66,6 +69,8 @@ Liste retirePremier_i(Element v, Liste l);
 // version recursive
 Liste retirePremier_r(Element v, Liste l);
 
+// compare deux elements
+extern bool equalsElement(Element e1, Element e2);
 
 void afficheEnvers_r(Liste l);
 

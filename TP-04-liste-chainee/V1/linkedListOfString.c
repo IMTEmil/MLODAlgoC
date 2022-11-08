@@ -11,6 +11,11 @@ void detruireElement(Element e)
 
 }
 
+// compare deux elements
+bool equalsElement(Element e1, Element e2){
+	return !strcmp((char *)e1, (char *)e2);
+}
+
 int main(void)
 {
     char *c = "chaine";
