@@ -1,10 +1,5 @@
 #include "linkedListOfMusic.h"
 
-int creerMusic(Music *music)
-{
-
-}
-
 int OpenReadFile(FILE **file, char *FileName)
 {
     *file = fopen(FileName, "r");
@@ -32,50 +27,63 @@ int ReadLineFile(FILE *file, char *Line)
     return 0;
 }
 
-int getNextString(char * Line, char **string, char *delim)
-{  
-    char *s = NULL;
+int readUntilDelim(FILE *file, char delim, char* Line)
+{
+    int i = 0;
+    char c = fgetc(file);
 
-    s = strtok(Line, delim);
-    if (s == NULL) return -1;
-    *string = strdup(s);
+    while (c != delim && c != EOF)
+    {
+        if (Line != NULL) *(Line + i) = c;
+        i++;
+        c = fgetc(file);
+    }
 
+    Line[i]='\0';
+
+    if (c == EOF) 
+        return -1;
     return 0;
 }
 
-int getNextInt(char *Line, int *i, char *delim)
-{   
-    char *string = NULL;
+int readAndAddTo(FILE *file, char delim, char **string)
+{
+    char s[256] = {0};
+    __uint8_t out = 0;
 
-    string = strtok(Line, delim);
-    if (string == NULL) return -1;
-    *i = atoi(string);
+    if (readUntilDelim(file, delim, s) == 0) {
+        if (strlen(s) != 0)
+        {
+            *string = malloc(strlen(s) * sizeof(char));
+            if (*string == NULL) return -1;
+            memcpy(*string, s, strlen(s) * sizeof(char));
+        } 
+        else    
+            *string = NULL;
+    } else return -1;
 
     return 0;
 }
 
 int LineToMusic(FILE *file, Music **music)
 {
-    char Line[512] = {0}; // max line size 512 bytes 
-    unsigned int memorySize = 0;
-    char delim[2] = ",";
+    char delim = ',';
+    char s[256] = { 0 };
+
     *music = (Music *) malloc(sizeof(Music));
-    __uint8_t out = 0;
+    
+    if (readAndAddTo(file, delim, &(*music)->Name) == -1) return 1;
+    readAndAddTo(file, delim, &(*music)->Artist);
+    readAndAddTo(file, delim, &(*music)->Album);
+    readAndAddTo(file, delim, &(*music)->Genre);
+    readAndAddTo(file, delim, &(*music)->DiscNumber);
+    readAndAddTo(file, delim, &(*music)->TrackNumber);
+    readAndAddTo(file,'\n', &(*music)->Year);
 
-    if (ReadLineFile(file, Line) == -1) out = 1; 
-
-    if (getNextString(Line, &(*music)->Name, delim) != 0) return -1;
-    if (getNextString(NULL, &(*music)->Artist, delim) != 0) return -1;
-    if (getNextString(NULL, &(*music)->Album, delim) != 0) return -1;
-    if (getNextString(NULL, &(*music)->Genre, delim) != 0) return -1;
-    if (getNextInt(NULL, &(*music)->DiscNumber, delim) != 0) return -1;
-    if (getNextInt(NULL, &(*music)->TrackNumber, delim) != 0) return -1;
-    if (getNextInt(NULL, &(*music)->Year, delim) != 0) return -1;
-
-    return out;
+    return 0;
 }
 
-void lireFichierCSV(char * cheminFichier, Liste playlist)
+void lireFichierCSV(char * cheminFichier, Liste *playlist)
 {
     FILE *CSVfile = NULL;
     Music *music = NULL;
@@ -86,35 +94,62 @@ void lireFichierCSV(char * cheminFichier, Liste playlist)
 
         while (LineToMusic(CSVfile, &music) == 0)
         {
-            if (playlist == NULL) playlist = creer(music);
-            else ajoutFin_i(music ,playlist);
+            if (*playlist == NULL) 
+                *playlist = creer(music);
+            else ajoutFin_i(music ,*playlist);
             music = NULL;
         }
     }
+    
+    fclose(CSVfile);
 }
 
 void afficheElement(Element e)
 {
     Music *music = e;
 
-    fprintf(stdout, "Name: %s\n", music->Name);
+    fprintf(stdout, "%s,", music->Name);
 
-    fprintf(stdout, "Artist: %s\n", music->Artist);
+    fprintf(stdout, "%s,", music->Artist);
     
-    fprintf(stdout, "Album: %s\n", music->Album);
+    fprintf(stdout, "%s,", music->Album);
 
-    fprintf(stdout, "Genre: %s\n", music->Genre);
+    fprintf(stdout, "%s,", music->Genre);
 
-    fprintf(stdout, "Disc number: %d\n", (music->DiscNumber));
+    fprintf(stdout, "%s,", (music->DiscNumber));
 
-    fprintf(stdout, "Track number: %d\n", (music->TrackNumber));
+    fprintf(stdout, "%s,", (music->TrackNumber));
 
-    fprintf(stdout, "Year: %d\n", (music->Year));
+    fprintf(stdout, "%s\n", (music->Year));
+}
+
+
+void notNullfree(void *p) {
+    if(p!=NULL)
+        free(p);
 }
 
 void detruireElement(Element e)
 {
+    Music *music = e;
 
+    notNullfree(music->Name);
+    music->Name = NULL;
+    notNullfree(music->Artist);
+    music->Artist = NULL;
+    notNullfree(music->Genre);
+    music->Genre = NULL;
+    notNullfree(music->Album);
+    music->Album = NULL;
+    notNullfree(music->DiscNumber);
+    music->DiscNumber = NULL;
+    notNullfree(music->TrackNumber);
+    music->TrackNumber = NULL;
+    notNullfree(music->Year);
+    music->Year = NULL;
+
+    notNullfree(music);
+    music = NULL;
 }
 
 bool equalsElement(Element e1, Element e2)

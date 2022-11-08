@@ -62,13 +62,13 @@ void detruire_i(Liste l)
 
 	if (!(estVide(l)))
 	{
-		nextList = currentList->suiv;
-		do {
+		while (currentList != NULL) 
+		{
+			nextList = currentList->suiv;
+			detruireElement(currentList->val);
 			free(currentList);
-			detruireElement(currentList);
 			currentList = nextList;
-			nextList = currentList->suiv; 
-		} while (nextList != NULL);
+		}
 	}
 }
 
@@ -77,8 +77,8 @@ void detruire_r(Liste l)
 {
 	if (!(estVide(l)))
 	{
+		detruireElement(l->val);
 		detruire_r(l->suiv);
-		detruireElement(l->suiv);
 		free(l);
 	}
 }
