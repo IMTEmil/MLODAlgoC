@@ -132,7 +132,8 @@ Liste ajoutFin_r(Element v, Liste l) {
 }
 
 // compare deux elements
-bool equalsElement(Element e1, Element e2){
+bool equalsElement(Element e1, Element e2)
+{
 	return e1 == e2;
 }
 
@@ -149,7 +150,7 @@ Liste cherche_i(Element v,Liste l)
 		}
 		if (iterList->val == v) return iterList;
 	}
-	return l;
+	return NULL;
 }
 
 // version récursive

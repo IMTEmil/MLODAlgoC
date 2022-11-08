@@ -32,6 +32,8 @@ void afficheListe_i(Liste l);
 // version recursive
 void afficheListe_r(Liste l);
 
+extern bool equalsElement(Element e1, Element e2);
+
 extern void detruireElement(Element e);
 
 // Détruit tous les éléments de la liste l
