@@ -1,5 +1,6 @@
 #include "linkedListOfMusic.h"
 
+
 int OpenReadFile(FILE **file, char *FileName)
 {
     *file = fopen(FileName, "r");
@@ -138,8 +139,7 @@ void afficheElement(Element e)
     if (music->Year != NULL) fprintf(stdout, "%s\n", (music->Year));
 }
 
-
-void notNullfree(void *p) {
+void freeIfNotNull(void *p) {
     if(p!=NULL)
     {
         free(p);
@@ -151,18 +151,161 @@ void detruireElement(Element e)
 {
     Music *music = e;
 
-    notNullfree(music->Name);
-    notNullfree(music->Artist);
-    notNullfree(music->Genre);
-    notNullfree(music->Album);
-    notNullfree(music->DiscNumber);
-    notNullfree(music->TrackNumber);
-    notNullfree(music->Year);
+    freeIfNotNull(music->Name);
+    freeIfNotNull(music->Artist);
+    freeIfNotNull(music->Genre);
+    freeIfNotNull(music->Album);
+    freeIfNotNull(music->DiscNumber);
+    freeIfNotNull(music->TrackNumber);
+    freeIfNotNull(music->Year);
 
-    notNullfree(music);
+    freeIfNotNull(music);
+}
+
+int strcmpIfNotNull(char *s1, char *s2)
+{
+    if (s1 != NULL && s2 != NULL)
+    {
+        return strcmp(s1, s2);
+    }
+    return 0;
 }
 
 bool equalsElement(Element e1, Element e2)
 {
-    return !memcmp(e1, e2, sizeof(Music));
+    Music *m1 = e1;
+    Music *m2 = e2;
+
+    if (m1 == NULL || m2 == NULL) return false;
+
+    if (strcmpIfNotNull(m1->Album, m2->Album) != 0) return false;    
+
+    if (strcmpIfNotNull(m1->Name, m2->Name) != 0) return false; 
+
+    if (strcmpIfNotNull(m1->Genre, m2->Genre) != 0) return false; 
+
+    if (strcmpIfNotNull(m1->DiscNumber, m2->DiscNumber) != 0) return false; 
+
+    if (strcmpIfNotNull(m1->TrackNumber, m2->TrackNumber) != 0) return false; 
+
+    if (strcmpIfNotNull(m1->Year, m2->Year) != 0) return false; 
+
+    return true;
 }
+
+Liste getSubPlaylist(Liste playlist, unsigned int index)
+{
+    Liste l = playlist;
+    Liste iterListe = NULL;
+    unsigned int i = 0;
+    for (i = 0; i < index; i++)
+    {
+        l = playlist->suiv;
+        if (l == NULL) break;
+    }
+
+    return l;
+}
+
+Liste swapElement(Liste playlist, unsigned int i1, unsigned int i2)
+{
+    Liste subListe1 = getSubPlaylist(playlist, i1);
+    Liste subListe2 = getSubPlaylist(playlist, i2);
+    Music *music1 = subListe1->val;
+    Music *music2 = subListe2->val;
+
+    subListe1->val = music2;
+    subListe2->val = music1;
+    return playlist;
+}
+
+bool yearDelta(char *y1, char *y2)
+{
+    int year1 = atoi(y1);
+    int year2 = atoi(y2);
+    return year1 < year2;
+}
+
+void Merge(Liste playlist, int l, int m, int r)
+{
+	int i = 0, j = 0, k = 0;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+	Liste L = getSubPlaylist(playlist, l);
+
+	Liste R = getSubPlaylist(playlist, m + 1);
+
+    Liste currPlaylistL = L;
+
+    Liste currPlaylistR = R;
+
+    Music *valL = (Music *)L->val;
+
+    Music *valR = (Music *)R->val;
+    
+    k = l;  
+
+    while (i < n1 && j < n2)
+    {
+        if (yearDelta(valL->Year, valR->Year))
+        {
+            playlist = swapElement(playlist, k, l + i);
+            i++;
+        }
+        else 
+        {
+            playlist = swapElement(playlist, k, m + 1 + j);
+            j++;
+        }
+        L = getSubPlaylist(playlist, l + i);
+        R = getSubPlaylist(playlist, j + i);
+        valL = L->val;
+        valR = R->val;
+        k++;
+    }
+    /*
+
+		while (i < n1) {
+			memcpy(pTWL->pTW + k, TWL1.pTW + i, sizeof(TURING_WINNERS));	
+			i++;
+			k++;
+		}
+		while (j < n2) {
+			memcpy(pTWL->pTW + k, TWL2.pTW + j, sizeof(TURING_WINNERS));
+			j++;
+			k++;
+		}
+
+		free(TWL1.pTW);
+		free(TWL2.pTW);
+    */
+}
+
+void MergeSort(Liste playlist, int l, int r)
+{
+    int m = 0;
+
+    if (l < r)
+    {
+        m = (l + r) / 2;
+
+        MergeSort(playlist, l, m);
+
+        MergeSort(playlist, m + 1, r);
+
+        Merge(playlist, l, m, r);        
+    }
+}
+
+void SortByYear(Liste playlist, unsigned int nbLigns)
+{   
+   	MergeSort(playlist, 0, nbLigns);
+}
+
+/*
+Liste playlistFromCSVFile(char *fileName)
+{
+
+}
+*/
