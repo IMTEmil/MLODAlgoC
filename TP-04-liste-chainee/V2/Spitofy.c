@@ -2,8 +2,7 @@
 
 int main(void)
 {
-    Music music = { 0 };
-    Liste playlist = {0};
+    Liste playlist = NULL;
 
     lireFichierCSV("music.csv", &playlist);
 
