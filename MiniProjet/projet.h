@@ -60,14 +60,6 @@ typedef struct Snare
 
 } Snare;
 
-typedef struct 
-{
-    Snare snares[SNARE_COUNT];
-
-    unsigned int nbCurrentCount;
-
-} GAME_SNARE;
-
 typedef Snare Element;
 
 struct cellule_s {
@@ -82,28 +74,20 @@ typedef Cellule* Liste;
 Liste InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares);
 void CloseProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares);
 
-void DrawMenu(void);
 void IfCollisionSendCitation(GAME_SENEQUE *GameSeneque, int currentFrameNumber);
 void displayCitationForSeconds(GAME_SENEQUE *GameSeneque, int seconds, int currentFrame);
 void DrawSenequeHead(GAME_SENEQUE *GameSeneque, Vector2 SnakeHeadPosition);
-void DrawSnare(void);
+
 Liste UpdateSnares(Liste snares, unsigned int waitForNext, unsigned int lifeSpanSnare, Vector2 fruitPosition);
 void DrawSnares(Liste snares);
 bool SnareAlreadyAtPosition(Liste snares, Vector2 position);
 bool SnareCollision(Liste snares, Vector2 position);
 
 bool estVide(Liste l);
-
 Liste creer(Element v);
-
-Liste cherche(Element v,Liste l);
-
 Liste ajoutTete(Element v, Liste l);
-
 void detruire(Liste l);
-
 Liste ajoutFin(Element v, Liste l);
-
 Liste retirePremierElement(Liste l);
 
 #endif /*_PROJET_H_*/
