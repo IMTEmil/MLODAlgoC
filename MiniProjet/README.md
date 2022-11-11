@@ -34,3 +34,7 @@ $ make game
 ```
 $ make clean
 ```
+
+## Jouer au jeu ?
+
+![Tête de Senèque](/assets/seneque.png);
