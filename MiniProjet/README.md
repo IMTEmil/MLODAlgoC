@@ -18,6 +18,9 @@ Le répertoire contient:
 Par négligence, j'ai développé le projet sur un repertoire différent de celui-ci. L'historique des commits peut y être retrouvé sur le répertoire [MiniProjet](https://github.com/IMTEmil/MiniProjet), les commits fait après le 4 novembre 2022 sont sur le répertoire courant.
 
 ## Compiler 
+
+Avant de compiler, si vous n'avez pas raylib sur votre machine vous pouvez suivre cette page faite par notre enseignant : [installer raylib](https://github.com/LucFabresse/mlod-algoc-sujets/blob/main/MiniProjet/HOW_TO_Raylib.md)
+
 Pour compiler veuillez lancer la commande: 
 ```
 $ make snake
@@ -41,9 +44,25 @@ Voici le menu présenté à l'entrée du jeu ! :
 ![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Menu_du_jeu.png)
 
 3 choix se présentent à vous: 
-* Le classique Snake ! Les règles sont simples: il ne faut pas rentrer dans les murs ni dans soi-même et le but est de faire le plus long serpent possible. 
-![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snake.png)
+* Le classique Snake ! Les règles sont simples: il ne faut pas rentrer dans les murs ni dans soi-même et le but est de faire le plus long serpent possible.
+![snake](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snake.png)
 * Le stoïque Senèque ! Les règles sont identiques au Snake classique. La conduite peut-être accidentée si vous lisez en même temps...
-![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Seneque.png)
+![seneque](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Seneque.png)
 * Le dangereux Snare ! Attention! des obstacles apparaissent pendant votre course, les pièges sont dangereux que lorsqu'ils sont violet foncé. Pour vous aider, les murs sont vos amis !!
-![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snare.png)
+![snare](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snare.png)
+
+# Touches 
+
+Menu: 
+- 1, 2 ou 3 : choix du jeu
+
+En jeu:
+- P : bouton PAUSE en jeu
+- arrow_keys : changement de direction du serpent
+
+Ecran de défaite: 
+- ENTER : rejouer au même jeu
+- I : revenir au menu initial
+![ecran de défaite](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Ecran_defaite.png)
+
+# Implémentation
