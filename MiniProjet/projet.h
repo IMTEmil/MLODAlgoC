@@ -10,22 +10,6 @@
 #define SNARE_COUNT 30
 #define SQUARE_SIZE 31
 
-static char *CitationsSeneque[] = {
-"Le travail est l'aliment des âmes nobles.",
-"C'est pendant l'orage qu'on connait le pilote.",
-"Toute la vie n'est qu'un voyage vers la mort.",
-"Hâte toi de bien vivre et songe que chaque jour est à lui seul une vie.",
-"Je préfère modérer mes joies que réprimer mes douleurs.",
-"Il ne vaut mieux ne pas commencer que de cesser",
-"Un grand exemple ne nait que de la mauvaise fortune.",
-"Il est vaincu sans gloire celui qui est vaincu sans péril.",
-"La parole reflète l'âme.",
-"A quoi perd-on la plus grand partie de sa vie ? à différer.",
-"On est nulle part quand on est partout.",
-"Pendant qu'on la diffère, la vie passe en courant.",
-"Ils vomissent pour manger, ils mangent pour vomir.",
-"L'erreur n'est pas un crime."};
-
 typedef enum GAMESTATE
 {
     GS_MENU,
