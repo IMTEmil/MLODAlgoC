@@ -34,7 +34,7 @@ bool SnareCollision(Liste snares, Vector2 position)
     return false;
 }
 
-Snare InitSnare(Liste snares, Snare snare, Vector2 fruitPosition)
+Snare SnareInit(Liste snares, Snare snare, Vector2 fruitPosition)
 {
     Vector2 offset = {0};
 
@@ -61,7 +61,7 @@ Snare InitSnare(Liste snares, Snare snare, Vector2 fruitPosition)
     return snare;
 }
 
-Liste snareStateIteration(Liste snares, unsigned int nbCalls)
+Liste SnareStateIteration(Liste snares, unsigned int nbCalls)
 {
     Liste currentList = snares;
     while (currentList != NULL)
@@ -85,9 +85,9 @@ Liste UpdateSnares(Liste snares, unsigned int waitForNext, unsigned int lifeSpan
 
     if (nbCalls % (60 * waitForNext) == 0)
     {
-        snareStateIteration(snares, nbCalls);
+        SnareStateIteration(snares, nbCalls);
 
-        snare = InitSnare(snares, snare, fruitPosition);
+        snare = SnareInit(snares, snare, fruitPosition);
 
         snare.nSeconds = nbCalls / 60;
 
@@ -122,12 +122,22 @@ void IfCollisionSendCitation(GAME_SENEQUE *GameSeneque, int currentFrameNumber)
     GameSeneque->LastCitationFrame = currentFrameNumber;
 }
 
-void displayCitation(GAME_SENEQUE *GameSeneque, int seconds, int currentFrameNumber)
+void displayCitationForSeconds(GAME_SENEQUE *GameSeneque, int seconds, int currentFrameNumber)
 {
     if ((currentFrameNumber - GameSeneque->LastCitationFrame) > (60 * seconds))
     {
         GameSeneque->isCitation = false;
         GameSeneque->indexCitation = GetRandomValue(0, (sizeof(CitationsSeneque) / sizeof(CitationsSeneque[0])));
+    }
+}
+
+void DrawSenequeHead(GAME_SENEQUE *GameSeneque, Vector2 SnakeHeadPosition)
+{
+    DrawTexture(GameSeneque->SenequeHeadImage, SnakeHeadPosition.x, SnakeHeadPosition.y, WHITE);
+
+    if (GameSeneque->isCitation == true)
+    {
+        DrawText(CitationsSeneque[GameSeneque->indexCitation], GetScreenWidth() / 2 - MeasureText(CitationsSeneque[GameSeneque->indexCitation], 21) / 2, GetScreenHeight() / 2 - 21, 23, DARKBLUE);
     }
 }
 
@@ -210,7 +220,7 @@ Liste InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares)
     gameSeneque->SenequeHeadImage = LoadTextureFromImage(TempImage);
     UnloadImage(TempImage);
 
-    snare = InitSnare(snares, snare, (Vector2) {0,0});
+    snare = SnareInit(snares, snare, (Vector2) {0,0});
     snares = creer(snare);
     return snares;
 }

@@ -264,7 +264,7 @@ void UpdateGame(void)
                 snares = UpdateSnares(snares, 1, 50, fruit.position);
             }
 
-            displayCitation(&GameSeneque, 1, framesCounter);
+            displayCitationForSeconds(&GameSeneque, 2, framesCounter);
             framesCounter++;
         }
     }
@@ -310,19 +310,6 @@ void DrawMenu(void)
         GameState = GS_SNACK;
 }
 
-void DrawSeneque(void)
-{
-    if (GameState == GS_SENEQUE)
-    {
-        DrawTexture(GameSeneque.SenequeHeadImage, snake[0].position.x, snake[0].position.y, WHITE);
-
-        if (GameSeneque.isCitation == true)
-        {
-            DrawText(CitationsSeneque[GameSeneque.indexCitation], screenWidth / 2 - MeasureText(CitationsSeneque[GameSeneque.indexCitation], 21) / 2, screenHeight / 2 - 21, 23, DARKBLUE);
-        }
-    }
-}
-
 // Draw game (one frame)
 void DrawGame(void)
 {
@@ -359,7 +346,7 @@ void DrawGame(void)
             DrawSnares(snares);
         }
 
-        DrawSeneque();
+        if (GameState == GS_SENEQUE ) DrawSenequeHead(&GameSeneque, snake[0].position);
 
         if (pause)
             DrawText("GAME PAUSED", screenWidth / 2 - MeasureText("GAME PAUSED", 40) / 2, screenHeight / 2 - 40, 40, GRAY);

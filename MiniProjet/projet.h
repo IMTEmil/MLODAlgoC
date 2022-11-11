@@ -102,16 +102,13 @@ void CloseProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares);
 
 void DrawMenu(void);
 void IfCollisionSendCitation(GAME_SENEQUE *GameSeneque, int currentFrameNumber);
-void displayCitation(GAME_SENEQUE *GameSeneque, int seconds, int currentFrame);
-void DrawSeneque(void);
+void displayCitationForSeconds(GAME_SENEQUE *GameSeneque, int seconds, int currentFrame);
+void DrawSenequeHead(GAME_SENEQUE *GameSeneque, Vector2 SnakeHeadPosition);
 void DrawSnare(void);
 Liste UpdateSnares(Liste snares, unsigned int waitForNext, unsigned int lifeSpanSnare, Vector2 fruitPosition);
 void DrawSnares(Liste snares);
 bool SnareAlreadyAtPosition(Liste snares, Vector2 position);
 bool SnareCollision(Liste snares, Vector2 position);
-
-// ajout d'une partie du code de la liste_chainée que nous avons fait en TP
-// je peux réutiliser le tout en changeant juste le typedef Snare Element
 
 bool estVide(Liste l);
 
@@ -127,4 +124,4 @@ Liste ajoutFin(Element v, Liste l);
 
 Liste retirePremierElement(Liste l);
 
-#endif
+#endif /*_PROJET_H_*/
