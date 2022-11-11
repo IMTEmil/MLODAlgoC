@@ -293,8 +293,7 @@ void DrawMenu(void)
     DrawText("Choose your game !", (GetScreenWidth() - MeasureText("Choose your game !", 50)) / 2, 40, 50, LIGHTGRAY);
     DrawText("\'1\'. SNAKE", 50, 140, MENU_CHOICE_FONT_SIZE, LIGHTGRAY);
     DrawText("\'2\'. SENEQUE", 400, 140, MENU_CHOICE_FONT_SIZE, LIGHTGRAY);
-    DrawText("\'3\'. SNARE", 50, 300, MENU_CHOICE_FONT_SIZE, LIGHTGRAY);
-    DrawText("\'4\'. SNACK", 400, 300, MENU_CHOICE_FONT_SIZE, LIGHTGRAY);
+    DrawText("\'3\'. SNARE", 270, 300, MENU_CHOICE_FONT_SIZE, LIGHTGRAY);
 
     // Wait for user input
     if (IsKeyPressed('1') == true)
@@ -305,9 +304,6 @@ void DrawMenu(void)
 
     if (IsKeyPressed('3') == true)
         GameState = GS_SNARE;
-
-    if (IsKeyPressed('4') == true)
-        GameState = GS_SNACK;
 }
 
 // Draw game (one frame)
