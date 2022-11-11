@@ -1,10 +1,11 @@
 #include "projet.h"
 
-void SnareColorUpdate(Snare *snare)
+Snare SnareColorUpdate(Snare snare)
 {
-    if (snare->state == SNARE_START) snare->color = LIGHTGRAY;
-    if (snare->state == SNARE_LOADING) snare->color = PURPLE;
-    if (snare->state == SNARE_CHARGED) snare->color = DARKPURPLE;
+    if (snare.state == SNARE_START) snare.color = LIGHTGRAY;
+    if (snare.state == SNARE_LOADING) snare.color = PURPLE;
+    if (snare.state == SNARE_CHARGED) snare.color = DARKPURPLE;
+    return snare;
 }
 
 bool SnareAlreadyAtPosition(Liste snares, Vector2 position)
@@ -33,48 +34,50 @@ bool SnareCollision(Liste snares, Vector2 position)
     return false;
 }
 
-int InitSnare(Liste *snares, Snare *snare, Vector2 fruitPosition)
+Snare InitSnare(Liste snares, Snare snare, Vector2 fruitPosition)
 {
     Vector2 offset = {0};
-    int j = 0;
 
     offset.x = GetScreenWidth() % SQUARE_SIZE;
     offset.y = GetScreenHeight() % SQUARE_SIZE;
 
-    snare->size = (Vector2) { SQUARE_SIZE, SQUARE_SIZE };    
+    snare.size = (Vector2) { SQUARE_SIZE, SQUARE_SIZE };    
 
-    snare->active = true;
+    snare.active = true;
 
-    snare->state = SNARE_START;
+    snare.state = SNARE_START;
 
-    snare->nSeconds = 0;
+    snare.nSeconds = 0;
 
-    snare->color = LIGHTGRAY;
+    snare.color = LIGHTGRAY;
 
-    snare->position = (Vector2){GetRandomValue(0, (GetScreenWidth() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.x / 2, GetRandomValue(0, (GetScreenHeight() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.y / 2};
+    snare.position = (Vector2){GetRandomValue(0, (GetScreenWidth() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.x / 2, GetRandomValue(0, (GetScreenHeight() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.y / 2};
 
-    while (SnareAlreadyAtPosition(*snares, snare->position) || ((fruitPosition.x == snare->position.x) && (fruitPosition.y == snare->position.y)))
+    while (SnareAlreadyAtPosition(snares, snare.position) || ((fruitPosition.x == snare.position.x) && (fruitPosition.y == snare.position.y)))
     {
-        snare->position = (Vector2){GetRandomValue(0, (GetScreenWidth() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.x / 2, GetRandomValue(0, (GetScreenHeight() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.y / 2};
+        snare.position = (Vector2){GetRandomValue(0, (GetScreenWidth() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.x / 2, GetRandomValue(0, (GetScreenHeight() / SQUARE_SIZE) - 1) * SQUARE_SIZE + offset.y / 2};
     }
+
+    return snare;
 }
 
-void snareStateIteration(Liste *snares, unsigned int nbCalls)
+Liste snareStateIteration(Liste snares, unsigned int nbCalls)
 {
-    Liste currentList = *snares;
+    Liste currentList = snares;
     while (currentList != NULL)
     {
         if (currentList->val.state != SNARE_CHARGED)
         {
             currentList->val.state++;
-            SnareColorUpdate(&currentList->val);
+            currentList->val = SnareColorUpdate(currentList->val);
         }
        
         currentList = currentList->suiv;
     }
+    return snares;
 }
 
-void UpdateSnares(Liste *snares, unsigned int waitForNext, unsigned int lifeSpanSnare, Vector2 fruitPosition)
+Liste UpdateSnares(Liste snares, unsigned int waitForNext, unsigned int lifeSpanSnare, Vector2 fruitPosition)
 {
     static unsigned int nbCalls = 1;
 
@@ -84,22 +87,23 @@ void UpdateSnares(Liste *snares, unsigned int waitForNext, unsigned int lifeSpan
     {
         snareStateIteration(snares, nbCalls);
 
-        InitSnare(snares, &snare, fruitPosition);
+        snare = InitSnare(snares, snare, fruitPosition);
 
         snare.nSeconds = nbCalls / 60;
 
-        ajoutFin(snare ,*snares);
+        snares = ajoutFin(snare ,snares);
     }
 
     if (nbCalls == 60) 
         nbCalls = 60;
 
-    if (((nbCalls / 60) - (*snares)->val.nSeconds) == lifeSpanSnare)
+    if (((nbCalls / 60) - snares->val.nSeconds) == lifeSpanSnare)
     {
         retirePremierElement(snares);
     }
 
     nbCalls++;
+    return snares;
 }
 
 void DrawSnares(Liste snares)
@@ -127,8 +131,6 @@ void displayCitation(GAME_SENEQUE *GameSeneque, int seconds, int currentFrameNum
     }
 }
 
-#define TODO NULL;
-
 bool estVide(Liste l) {
 	return l == NULL;
 }
@@ -153,26 +155,31 @@ Liste ajoutTete(Element v, Liste l) {
 	return newList;
 }
 
-void detruire(Liste *l) 
+void detruire(Liste l) 
 {
-	while (!(estVide(*l)))
+	Liste nextList = NULL;
+	Liste currentList = l;
+
+	if (!(estVide(l)))
 	{
-        retirePremierElement(l);
+		while (currentList != NULL) 
+		{
+			nextList = currentList->suiv;
+			free(currentList);
+			currentList = nextList;
+		}
 	}
-    free(*l);
-    *l = NULL;
 }
 
 Liste ajoutFin(Element v, Liste l) 
 {
 	Liste lastElement = l;
 	Liste newList = malloc(sizeof(Cellule));
-	if (newList != NULL && !estVide(l))
+	if (newList != NULL)
 	{
-		while (lastElement->suiv != NULL)
-        {
-            lastElement = lastElement->suiv;
-        }
+		while (lastElement->suiv != NULL){
+			lastElement = lastElement->suiv;
+		}
 	}
 	lastElement->suiv = newList;
 	newList->val = v;
@@ -180,19 +187,20 @@ Liste ajoutFin(Element v, Liste l)
 	return l;
 }
 
-void retirePremierElement(Liste *l)
+Liste retirePremierElement(Liste l)
 {
     Liste premierElement = { 0 };
-	if (!estVide(*l))
+	if (!estVide(l))
     {
-        premierElement = *l;
-        *l = (*l)->suiv;
+        premierElement = l;
+        l = l->suiv;
         free(premierElement);
         premierElement = NULL;
     }
+    return l;
 }
 
-void InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste *snares)
+Liste InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares)
 {
     Image TempImage = { 0 };
     Snare snare = { 0 };
@@ -202,11 +210,12 @@ void InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste *snares)
     gameSeneque->SenequeHeadImage = LoadTextureFromImage(TempImage);
     UnloadImage(TempImage);
 
-    InitSnare(snares, &snare, (Vector2) {0,0});
-    *snares = creer(snare);
+    snare = InitSnare(snares, snare, (Vector2) {0,0});
+    snares = creer(snare);
+    return snares;
 }
 
-void CloseProjetAddOn(GAME_SENEQUE *gameSeneque, Liste *snares)
+void CloseProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares)
 {
     UnloadTexture(gameSeneque->SenequeHeadImage);
 

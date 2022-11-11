@@ -97,17 +97,15 @@ typedef struct cellule_s Cellule;
 
 typedef Cellule* Liste;
 
-static GAME_SNARE GameSnare = { 0 };
-
-void InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste *snares);
-void CloseProjetAddOn(GAME_SENEQUE *gameSeneque, Liste *snares);
+Liste InitProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares);
+void CloseProjetAddOn(GAME_SENEQUE *gameSeneque, Liste snares);
 
 void DrawMenu(void);
 void IfCollisionSendCitation(GAME_SENEQUE *GameSeneque, int currentFrameNumber);
 void displayCitation(GAME_SENEQUE *GameSeneque, int seconds, int currentFrame);
 void DrawSeneque(void);
 void DrawSnare(void);
-void UpdateSnares(Liste *snares, unsigned int waitForNext, unsigned int lifeSpanSnare, Vector2 fruitPosition);
+Liste UpdateSnares(Liste snares, unsigned int waitForNext, unsigned int lifeSpanSnare, Vector2 fruitPosition);
 void DrawSnares(Liste snares);
 bool SnareAlreadyAtPosition(Liste snares, Vector2 position);
 bool SnareCollision(Liste snares, Vector2 position);
@@ -123,10 +121,10 @@ Liste cherche(Element v,Liste l);
 
 Liste ajoutTete(Element v, Liste l);
 
-void detruire(Liste *l);
+void detruire(Liste l);
 
 Liste ajoutFin(Element v, Liste l);
 
-void retirePremierElement(Liste *l);
+Liste retirePremierElement(Liste l);
 
 #endif

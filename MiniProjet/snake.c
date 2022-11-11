@@ -151,7 +151,7 @@ void InitGame(void)
     fruit.color = SKYBLUE;
     fruit.active = false;
 
-    InitProjetAddOn(&GameSeneque, &snares);
+    snares = InitProjetAddOn(&GameSeneque, snares);
 }
 
 // Update game (one frame)
@@ -261,7 +261,7 @@ void UpdateGame(void)
 
             if (GameState == GS_SNARE)
             {
-                UpdateSnares(&snares, 1, 50, fruit.position);
+                snares = UpdateSnares(snares, 1, 50, fruit.position);
             }
 
             displayCitation(&GameSeneque, 1, framesCounter);
@@ -378,7 +378,7 @@ void DrawGame(void)
 // Unload game variables
 void UnloadGame(void)
 {
-    CloseProjetAddOn(&GameSeneque, &snares);
+    CloseProjetAddOn(&GameSeneque, snares);
 }
 
 // Update and Draw (one frame)
