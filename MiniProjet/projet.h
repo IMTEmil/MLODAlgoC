@@ -18,9 +18,7 @@ typedef enum GAMESTATE
 
     GS_SENEQUE,
 
-    GS_SNARE,
-
-    GS_SNACK
+    GS_SNARE
 
 } GAMESTATE;
 
