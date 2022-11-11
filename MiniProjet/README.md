@@ -67,7 +67,7 @@ Ecran de défaite:
 
 # Implémentation
 
-Pour différencier mon code de celui donné par raylib, j'ai crée un module projet.c et son header projet.h dans lesquels sont définis les fonctions, structures et autres que j'ai implémenté.
+Pour différencier mon code de celui donné par raylib, j'ai crée un module projet.c et son header projet.h dans lesquels sont définis les fonctions, structures et autres que j'ai implémenté. Le module est initié et fermé avec les fonctions InitProjetAddOn et CloseProjetAddOn.
 
 Tout d'abord, la version que j'ai implémenté propose plusieurs jeux et un menu. J'ai implémenté quatre états de jeu (GameState) qui renseignent quand le jeu est dans le menu ou dans un des jeux. En fonction de ce flag, l'application réagit différement. 
 En pratique, j'ai traduit cela par une énumération pouvant représenter 4 états et une variable globale du jeu qui prend comme valeur l'état courant.
