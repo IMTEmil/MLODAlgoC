@@ -74,7 +74,16 @@ En pratique, j'ai traduit cela par une énumération pouvant représenter 4 éta
 
 Ensuite, l'implémentation du deuxième jeu Senèque n'a pas été très sorcier. Si le jeu est dans l'état GAME_SENEQUE, on charge une image de la tête de Senèque à le place de celle du serpent. Ensuite, dès que le joueur mange un fruit on affiche au milieu de l'écran une des citations de Senèque.
 
-Finalement, pour le dernier jeu, j'ai utilisé une liste chaînée pour stocker les pièges qui se créent au fur et à mesure de la partie et supprimer les plus anciens. Un piège a 3 états : gris, violet et violet foncé et une durée de vie variable. Il apparait au hasard sur la grille. 
+Finalement, pour le dernier jeu, j'ai utilisé une liste chaînée pour stocker les pièges qui se créent au fur et à mesure de la partie et supprimer les plus anciens. Un piège a 3 états : gris, violet et violet foncé et une durée de vie variable. La structure de données représentant un piège est très similaire à celle du fruit implémenté par raylib: 
+- une position
+- une taille 
+- un booléen si il est actif ou non
+- une couleur
+mais avec des ajouts: 
+- un état : initialisé, en chargement et chargé
+- le nombre de secondes depuis sa création
+
+Toutes les frames, les pièges sont mis à jours. 
 
 # Améliorations possibles
 
