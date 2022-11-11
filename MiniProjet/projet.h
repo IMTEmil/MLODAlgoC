@@ -89,5 +89,8 @@ Liste ajoutTete(Element v, Liste l);
 void detruire(Liste l);
 Liste ajoutFin(Element v, Liste l);
 Liste retirePremierElement(Liste l);
+Snare SnareColorUpdate(Snare snare);
+Snare SnareInit(Liste snares, Snare snare, Vector2 fruitPosition);
+Liste SnareStateIteration(Liste snares, unsigned int nbCalls);
 
 #endif /*_PROJET_H_*/
