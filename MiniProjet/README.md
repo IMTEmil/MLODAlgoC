@@ -37,4 +37,4 @@ $ make clean
 
 ## Jouer au jeu ?
 
-![Tête de Senèque](https://raw.github.com/IMTEmil/MLODAlgoC/tree/master/MiniProjet/assets/seneque.png);
+![Tête de Senèque](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/seneque.png);
