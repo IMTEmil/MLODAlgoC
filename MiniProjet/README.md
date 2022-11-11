@@ -37,4 +37,13 @@ $ make clean
 
 ## Jouer au jeu ?
 
-![Voici le menu présenté à l'entrée du jeu ! :](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Menu_du_jeu.png)
+Voici le menu présenté à l'entrée du jeu ! :
+![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Menu_du_jeu.png)
+
+3 choix se présentent à vous: 
+* Le classique Snake ! Les règles sont simples: il ne faut pas rentrer dans les murs ni dans soi-même et le but est de faire le plus long serpent possible. 
+![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snake.png)
+* Le stoïque Senèque ! Les règles sont identiques au Snake classique. La conduite peut-être accidentée si vous lisez en même temps...
+![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Seneque.png)
+* Le dangereux Snare ! Attention! des obstacles apparaissent pendant votre course, les pièges sont dangereux que lorsqu'ils sont violet foncé. Pour vous aider, les murs sont vos amis !!
+![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snare.png)
