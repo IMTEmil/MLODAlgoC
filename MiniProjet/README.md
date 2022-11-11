@@ -44,7 +44,7 @@ Voici le menu présenté à l'entrée du jeu ! :
 ![menu](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Menu_du_jeu.png)
 
 3 choix se présentent à vous: 
-* Le classique Snake ! Les règles sont simples: il ne faut pas rentrer dans les murs ni dans soi-même et le but est de faire le plus long serpent possible.
+* Le classique Snake ! Les règles sont simples: il ne faut pas rentrer dans les murs ni dans soi-même et le but est de faire le plus long serpent possible en mangeant des fruits.
 ![snake](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Snake.png)
 * Le stoïque Senèque ! Les règles sont identiques au Snake classique. La conduite peut-être accidentée si vous lisez en même temps...
 ![seneque](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Seneque.png)
@@ -66,3 +66,18 @@ Ecran de défaite:
 ![ecran de défaite](https://raw.github.com/IMTEmil/MLODAlgoC/master/MiniProjet/assets/Ecran_defaite.png)
 
 # Implémentation
+
+Pour différencier mon code de celui donné par raylib, j'ai crée un module projet.c et son header projet.h dans lesquels sont définis les fonctions, structures et autres que j'ai implémenté.
+
+Tout d'abord, la version que j'ai implémenté propose plusieurs jeux et un menu. J'ai implémenté quatre états de jeu (GameState) qui renseignent quand le jeu est dans le menu ou dans un des jeux. En fonction de ce flag, l'application réagit différement. 
+En pratique, j'ai traduit cela par une énumération pouvant représenter 4 états et une variable globale du jeu qui prend comme valeur l'état courant.
+
+Ensuite, l'implémentation du deuxième jeu Senèque n'a pas été très sorcier. Si le jeu est dans l'état GAME_SENEQUE, on charge une image de la tête de Senèque à le place de celle du serpent. Ensuite, dès que le joueur mange un fruit on affiche au milieu de l'écran une des citations de Senèque.
+
+Finalement, pour le dernier jeu, j'ai utilisé une liste chaînée pour stocker les pièges qui se créent au fur et à mesure de la partie et supprimer les plus anciens. Un piège a 3 états : gris, violet et violet foncé et une durée de vie variable. Il apparait au hasard sur la grille. 
+
+# Améliorations possibles
+
+* En réalité, le nombre de pièges ne dépasse pas une valeur qu'on pourrait déterminer en début de programme, en fonction du temps de vie d'un piège. De ce fait, une liste chaînée est peut-être trop performante pour ce qu'on cherche à faire. Un buffer circulaire aurait été plus approprié. En effet, l'implémentation d'un buffer circulaire aurait éviter d'allouer et de désallouer de la mémoire dès qu'un piège apparait ou disparait. D'autant plus que nous ne savons pas combien de temps la fonction malloc peut prendre ce qui est embêtant dans un jeu à temps réel.
+
+* D'un point de vue gameplay: on peut aussi imaginer que les pièges se déplacent vers la gauche et apparaissent sur la première colonne aléatoirement.
