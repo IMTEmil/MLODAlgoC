@@ -95,7 +95,7 @@ void lireFichierCSV(char * cheminFichier, Liste *playlist)
 
     if (OpenReadFile(&CSVfile, cheminFichier) == 0)
     {
-        ReadLineFile(CSVfile, NULL); //lit la première ligne sans information
+        //ReadLineFile(CSVfile, NULL); //lit la première ligne sans information
 
         while (LineToMusic(CSVfile, &music) == 0)
         {

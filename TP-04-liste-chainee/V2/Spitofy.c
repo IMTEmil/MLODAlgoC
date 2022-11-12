@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 
     if (argc == 3 && (strcmp(argv[2], "-sort") == 0))
     {
-        mergeSort(&playlist);
+        mergeSort(&(playlist->suiv));
     }
 
     if (playlist != NULL)
