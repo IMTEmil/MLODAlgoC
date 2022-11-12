@@ -12,7 +12,7 @@ pour effacer le fichier executable et les fichiers de sortie:
 $make clean
 ``` 
 
-pour lancer les tests de validation du tp i.e. 
+pour lancer les tests de validation du tp
 ```
 $make test
 ``` 
