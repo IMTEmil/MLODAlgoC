@@ -17,6 +17,7 @@ typedef struct Music
 
 void lireFichierCSV(char * cheminFichier, Liste *playlist);
 void SortByYear(Liste playlist, unsigned int nbLigns);
+void mergeSort(Liste *playlist);
 
 // Spitofy 2.0
 //Liste playlistFromCSVFile(char *fileName);
