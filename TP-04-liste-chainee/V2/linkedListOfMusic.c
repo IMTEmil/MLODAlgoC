@@ -50,22 +50,21 @@ int readUntilDelim(FILE *file, char delim, char* Line)
 int readAndAddTo(FILE *file, char delim, char **string)
 {
     char s[100] = {0};
-    __uint8_t out = 0;
+    int out = 0;
     unsigned int slen = 0;
 
-    if (readUntilDelim(file, delim, s) == 0) {
-        slen = strlen(s);
-        if (slen != 0)
-        {
-            *string = malloc(slen + 1);
-            if (*string == NULL) return -1;
-            strcpy(*string, s);
-        } 
-        else    
-            *string = NULL;
-    } else return -1;
+    out = readUntilDelim(file, delim, s);
+    
+    slen = strlen(s);
+    if (slen != 0)
+    {
+        *string = malloc(slen + 1);
+        if (*string == NULL) return -1;
+        strcpy(*string, s);
+    } 
+    else *string = NULL;
 
-    return 0;
+    return out;
 }
 
 int LineToMusic(FILE *file, Music **music)
@@ -97,7 +96,7 @@ void lireFichierCSV(char * cheminFichier, Liste *playlist)
 
     if (OpenReadFile(&CSVfile, cheminFichier) == 0)
     {
-        //ReadLineFile(CSVfile, NULL); //lit la première ligne sans information
+        ReadLineFile(CSVfile, NULL); //lit la première ligne sans information
 
         while (LineToMusic(CSVfile, &music) == 0)
         {
@@ -200,112 +199,80 @@ Liste getSubPlaylist(Liste playlist, unsigned int index)
     unsigned int i = 0;
     for (i = 0; i < index; i++)
     {
-        l = playlist->suiv;
+        l = l->suiv;
         if (l == NULL) break;
     }
 
     return l;
 }
 
-Liste swapElement(Liste playlist, unsigned int i1, unsigned int i2)
+// https://iq.opengenus.org/fast-and-slow-pointer-technique/
+void getTwoSubPlaylist(Liste playlist, Liste *g, Liste *d)
 {
-    Liste subListe1 = getSubPlaylist(playlist, i1);
-    Liste subListe2 = getSubPlaylist(playlist, i2);
-    Music *music1 = subListe1->val;
-    Music *music2 = subListe2->val;
+    Liste fast, slow;
+    slow = playlist;
+    fast = playlist->suiv;
 
-    subListe1->val = music2;
-    subListe2->val = music1;
-    return playlist;
-}
-
-bool yearDelta(char *y1, char *y2)
-{
-    int year1 = atoi(y1);
-    int year2 = atoi(y2);
-    return year1 < year2;
-}
-
-void Merge(Liste playlist, int l, int m, int r)
-{
-	int i = 0, j = 0, k = 0;
-    int n1 = m - l + 1;
-    int n2 = r - m;
-
-	Liste L = getSubPlaylist(playlist, l);
-
-	Liste R = getSubPlaylist(playlist, m + 1);
-
-    Liste currPlaylistL = L;
-
-    Liste currPlaylistR = R;
-
-    Music *valL = (Music *)L->val;
-
-    Music *valR = (Music *)R->val;
-    
-    k = l;  
-
-    while (i < n1 && j < n2)
+    while(fast != NULL)
     {
-        if (yearDelta(valL->Year, valR->Year))
+        fast = fast->suiv;
+        if (fast != NULL)
         {
-            playlist = swapElement(playlist, k, l + i);
-            i++;
+            slow = slow->suiv;
+            fast = fast->suiv;
         }
-        else 
-        {
-            playlist = swapElement(playlist, k, m + 1 + j);
-            j++;
-        }
-        L = getSubPlaylist(playlist, l + i);
-        R = getSubPlaylist(playlist, j + i);
-        valL = L->val;
-        valR = R->val;
-        k++;
     }
-    /*
 
-		while (i < n1) {
-			memcpy(pTWL->pTW + k, TWL1.pTW + i, sizeof(TURING_WINNERS));	
-			i++;
-			k++;
-		}
-		while (j < n2) {
-			memcpy(pTWL->pTW + k, TWL2.pTW + j, sizeof(TURING_WINNERS));
-			j++;
-			k++;
-		}
-
-		free(TWL1.pTW);
-		free(TWL2.pTW);
-    */
+    *g = playlist;
+    *d = slow->suiv;
+    slow->suiv = NULL;
 }
 
-void MergeSort(Liste playlist, int l, int r)
+bool yearcmp(Element e1, Element e2)
 {
-    int m = 0;
+    Music *m1 = e1;
+    Music *m2 = e2;
+    int year1 = atoi(m1->Year);
+    int year2 = atoi(m2->Year);
 
-    if (l < r)
+    return year1 <= year2;
+}
+
+Liste SortedMerge(Liste g, Liste d)
+{
+    Liste l = NULL;
+
+    if (g == NULL) return d;
+    if (d == NULL) return g;
+
+    if (yearcmp(g->val, d->val))
     {
-        m = (l + r) / 2;
-
-        MergeSort(playlist, l, m);
-
-        MergeSort(playlist, m + 1, r);
-
-        Merge(playlist, l, m, r);        
+        l = g;
+        l->suiv = SortedMerge(g->suiv, d);
     }
+    else {
+
+        l = d;
+        l->suiv = SortedMerge(g, d->suiv);
+    }
+
+    return l;
 }
 
-void SortByYear(Liste playlist, unsigned int nbLigns)
-{   
-   	MergeSort(playlist, 0, nbLigns);
-}
-
-/*
-Liste playlistFromCSVFile(char *fileName)
+void mergeSort(Liste *playlist)
 {
+    Liste tete = *playlist;
+    Liste g = NULL, d = NULL;
 
+    if ((tete == NULL || tete->suiv == NULL))
+    {
+        return;
+    }
+
+    getTwoSubPlaylist(tete, &g, &d);
+
+    mergeSort(&g);
+    mergeSort(&d);
+
+    *playlist = SortedMerge(g,d);
 }
-*/

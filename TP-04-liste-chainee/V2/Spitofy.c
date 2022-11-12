@@ -8,7 +8,7 @@ int main(void)
 
     lireFichierCSV("music.csv", &playlist);
 
-    SortByYear(playlist, 2702);
+    mergeSort(&playlist);
 
     afficheListe_r(playlist);
 
