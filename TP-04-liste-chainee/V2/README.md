@@ -2,14 +2,19 @@
 
 # Fonctionnement
 
-pour compiler le projet
+pour compiler le projet:
 ```
 $make
 ``` 
 
-pour effacer le fichier executable
+pour effacer le fichier executable et les fichiers de sortie:
 ```
 $make clean
+``` 
+
+pour lancer les tests de validation du tp i.e. 
+```
+$make test
 ``` 
 
 # Après compilation
