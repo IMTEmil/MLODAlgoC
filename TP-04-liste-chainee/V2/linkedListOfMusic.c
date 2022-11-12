@@ -70,7 +70,6 @@ int readAndAddTo(FILE *file, char delim, char **string)
 int LineToMusic(FILE *file, Music **music)
 {
     char delim = ',';
-    char s[256] = { 0 };
 
     *music = (Music *) malloc(sizeof(Music));
     
@@ -195,7 +194,6 @@ bool equalsElement(Element e1, Element e2)
 Liste getSubPlaylist(Liste playlist, unsigned int index)
 {
     Liste l = playlist;
-    Liste iterListe = NULL;
     unsigned int i = 0;
     for (i = 0; i < index; i++)
     {
@@ -268,7 +266,6 @@ void mergeSort(Liste *playlist)
     {
         return;
     }
-
     getTwoSubPlaylist(tete, &g, &d);
 
     mergeSort(&g);

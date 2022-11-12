@@ -1,18 +1,25 @@
 #include "linkedListOfMusic.h"
 
-int main(void)
+int main(int argc, char **argv) 
 {
     Liste playlist = NULL;
-    Liste playlist2 = NULL;
-    Liste playlist3 = NULL;
 
-    lireFichierCSV("music.csv", &playlist);
+    if (argc > 1)
+    {
+        lireFichierCSV(argv[1], &playlist);
+    }
 
-    mergeSort(&playlist);
+    if (argc == 3 && (strcmp(argv[2], "-sort") == 0))
+    {
+        mergeSort(&playlist);
+    }
 
-    afficheListe_r(playlist);
+    if (playlist != NULL)
+    {
+        afficheListe_r(playlist);
 
-    detruire_i(playlist);
+        detruire_i(playlist);
+    }
 
     return 0;
 }
